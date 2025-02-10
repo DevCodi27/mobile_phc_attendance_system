@@ -1,5 +1,10 @@
 package com.code_red.phc_attendance_system.controllers;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.code_red.phc_attendance_system.dto.AuthResponseDTO;
 import com.code_red.phc_attendance_system.dto.LoginDTO;
+import com.code_red.phc_attendance_system.entities.AppUser;
+import com.code_red.phc_attendance_system.entities.Doctor;
+import com.code_red.phc_attendance_system.entities.Role;
 import com.code_red.phc_attendance_system.services.CustomUserDetailsService;
+import com.code_red.phc_attendance_system.services.DoctorService;
+import com.code_red.phc_attendance_system.services.UserService;
 import com.code_red.phc_attendance_system.util.JwtUtil;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping
 public class LoginController {
 	    @Autowired
 	    private AuthenticationManager authenticationManager;
@@ -29,19 +39,41 @@ public class LoginController {
 	    @Autowired
 	    private JwtUtil jwtUtil;
 
+	    @Autowired
+	    private UserService userService;
+	    
+	    @Autowired
+	    private DoctorService doctorService;
+	    
 	    @PostMapping("/login")
 	    public ResponseEntity<?> login(@RequestBody LoginDTO request) {
 	        try {
 	            authenticationManager.authenticate(
 	                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
 	            );
+	            
+	            final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+		        String email = userDetails.getUsername();
+		        Optional<AppUser> user = userService.findByEmail(email);
+		        Optional<Doctor> doctor = doctorService.findByEmail(email);
+		        Set<Role> roles;
+		        
+		        if (user.isPresent()) {
+		            roles = user.get().getRoles();
+		        } else if (doctor.isPresent()) {
+		            roles = doctor.get().getRoles();
+		        } else {
+		            throw new BadCredentialsException("User not found");
+		        }
+		        
+		        List<String> roleNames = roles.stream()
+		                .map(Role::getName)
+		                .collect(Collectors.toList());
+		        
+		        final String token = jwtUtil.generateToken(userDetails, roles);
+		        return ResponseEntity.ok(new AuthResponseDTO(token, roleNames));
 	        } catch (BadCredentialsException e) {
 	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
 	        }
-
-	        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-	        final String token = jwtUtil.generateToken(userDetails);
-
-	        return ResponseEntity.ok(new AuthResponseDTO(token));
 	    }
 }

@@ -14,6 +14,6 @@ public class Region {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "POLYGON") // Store as a spatial type
+    @Column(columnDefinition = "POLYGON NOT NULL SRID 4326") // Store as a spatial type
     private Polygon boundary;
 }

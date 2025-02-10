@@ -8,17 +8,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.code_red.phc_attendance_system.dto.GPSResponseDTO;
-import com.code_red.phc_attendance_system.services.RegionService;
+import com.code_red.phc_attendance_system.dto.UserDTO;
+import com.code_red.phc_attendance_system.entities.AppUser;
+import com.code_red.phc_attendance_system.services.UserService;
 
 @RestController
-@RequestMapping("/gps")
-public class RegionController {
+@RequestMapping("/users")
+public class UserController {
 	@Autowired
-	private RegionService regionService;
+	private UserService userService;
 	
-	@PostMapping("/validate")
-	public ResponseEntity<GPSResponseDTO> verifyGPSWithinRegion(@RequestBody Long latitude, Long longitude){
-		return new ResponseEntity<>(new GPSResponseDTO(regionService.findRegionByCoordinates(latitude, longitude)), HttpStatus.OK);
+	@PostMapping("/register")
+	public ResponseEntity<AppUser> register(@RequestBody UserDTO userDTO) {
+		return new ResponseEntity<>(userService.register(userDTO), HttpStatus.CREATED);
 	}
 }
