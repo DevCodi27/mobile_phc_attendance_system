@@ -1,9 +1,6 @@
 package com.code_red.phc_attendance_system.entities;
 
 import java.util.Set;
-
-import org.hibernate.annotations.Cascade;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,6 +43,7 @@ public class Doctor {
 	        inverseJoinColumns = @JoinColumn(name = "role_id")
 	    )
 	    private Set<Role> roles;
-	    
+	    @OneToOne
+	    private Shift shift;
 	    public Doctor() { }
 }

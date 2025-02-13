@@ -16,6 +16,62 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `alerts`
+--
+
+DROP TABLE IF EXISTS `alerts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `alerts` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `message` varchar(255) DEFAULT NULL,
+  `sent_at` datetime(6) DEFAULT NULL,
+  `recipient_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK419j42c8tkd9ja320j2ah62eo` (`recipient_id`),
+  CONSTRAINT `FK419j42c8tkd9ja320j2ah62eo` FOREIGN KEY (`recipient_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `alerts`
+--
+
+LOCK TABLES `alerts` WRITE;
+/*!40000 ALTER TABLE `alerts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `alerts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `attendance`
+--
+
+DROP TABLE IF EXISTS `attendance`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `attendance` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `check_in_time` time(6) DEFAULT NULL,
+  `check_out_time` time(6) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `doctor_id` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKjp3ip61rr7v54al5cisdpvv0x` (`doctor_id`),
+  CONSTRAINT `FKjp3ip61rr7v54al5cisdpvv0x` FOREIGN KEY (`doctor_id`) REFERENCES `doctors` (`doctor_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `attendance`
+--
+
+LOCK TABLES `attendance` WRITE;
+/*!40000 ALTER TABLE `attendance` DISABLE KEYS */;
+/*!40000 ALTER TABLE `attendance` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `doctor_roles`
 --
 
@@ -56,9 +112,12 @@ CREATE TABLE `doctors` (
   `full_name` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `specialization` varchar(255) DEFAULT NULL,
+  `shift_id` bigint DEFAULT NULL,
   PRIMARY KEY (`doctor_id`),
   UNIQUE KEY `UKcaifv0va46t2mu85cg5afmayf` (`email`),
+  UNIQUE KEY `UKf37oee8utq0h8o3998g7g9jf7` (`shift_id`),
   KEY `FKm5r4md9thhnrsktdsrdqtlt4r` (`facility_id`),
+  CONSTRAINT `FK387yvgqq927rxa69i83lpf3kr` FOREIGN KEY (`shift_id`) REFERENCES `shifts` (`id`),
   CONSTRAINT `FKm5r4md9thhnrsktdsrdqtlt4r` FOREIGN KEY (`facility_id`) REFERENCES `facilities` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -69,7 +128,7 @@ CREATE TABLE `doctors` (
 
 LOCK TABLES `doctors` WRITE;
 /*!40000 ALTER TABLE `doctors` DISABLE KEYS */;
-INSERT INTO `doctors` VALUES (1,1,'arul@example.com','Dr. Arul Kumar','$2a$10$H7MgQyY9/LJuW2akSYWBweahlS9hCtCD7/a1HiZSWC2yfcfT9jAZG','General Medicine'),(2,1,'senthil@example.com','Dr. Senthil Kumar','$2a$10$uao6eBtXfC4ikPeaWFJTRuxdl2zLgIYnI6ABoJUFdMGSENa9ZIROC','Pediatrics'),(3,2,'priya@example.com','Dr. Priya Raj','$2a$10$eNVz6wn17Zgr9jMSW8g43eudyh0nXHtT14uA/IiZea82qsWdYSbIu','Gynecology'),(4,2,'karthik@example.com','Dr. Karthik Mani','$2a$10$hVJa8lroMFU02rzyEd8RV.OaCXGEr4hTNyaBPztaxS3T/krJc13b6','Orthopedics'),(5,3,'meena@example.com','Dr. Meena Mohan','$2a$10$vb3JGAWH7cKGNncX/3m0sORI2eAPYrTous8dPlRj/7VcSDBZyqLd6','Dermatology');
+INSERT INTO `doctors` VALUES (1,1,'arul@example.com','Dr. Arul Kumar','$2a$10$H7MgQyY9/LJuW2akSYWBweahlS9hCtCD7/a1HiZSWC2yfcfT9jAZG','General Medicine',NULL),(2,1,'senthil@example.com','Dr. Senthil Kumar','$2a$10$uao6eBtXfC4ikPeaWFJTRuxdl2zLgIYnI6ABoJUFdMGSENa9ZIROC','Pediatrics',NULL),(3,2,'priya@example.com','Dr. Priya Raj','$2a$10$eNVz6wn17Zgr9jMSW8g43eudyh0nXHtT14uA/IiZea82qsWdYSbIu','Gynecology',NULL),(4,2,'karthik@example.com','Dr. Karthik Mani','$2a$10$hVJa8lroMFU02rzyEd8RV.OaCXGEr4hTNyaBPztaxS3T/krJc13b6','Orthopedics',NULL),(5,3,'meena@example.com','Dr. Meena Mohan','$2a$10$vb3JGAWH7cKGNncX/3m0sORI2eAPYrTous8dPlRj/7VcSDBZyqLd6','Dermatology',NULL);
 /*!40000 ALTER TABLE `doctors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,7 +182,7 @@ CREATE TABLE `regions` (
 
 LOCK TABLES `regions` WRITE;
 /*!40000 ALTER TABLE `regions` DISABLE KEYS */;
-INSERT INTO `regions` VALUES (1,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0êLáNœéS@sΩm¶B\‹#@v®¶$\ÎéS@Wµ§£\‹#@\\ìnK\‰éS@´\Èz¢\Î\⁄#@\ÈFXTƒéS@\”k≥±\€#@êLáNœéS@sΩm¶B\‹#@'),(2,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0ò°\ÒDÜS@\Ôè\˜™ï\È#@\—\Èy7ÜS@∂-\ lê\È#@a\ƒ>ÜS@\‹,^,\È#@\‚Èï≤ÜS@Ω\»¸\Z\È#@ò°\ÒDÜS@\Ôè\˜™ï\È#@'),(3,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0\\›zMàS@T\≈T˙	\◊#@¶\–yç]àS@\œ˘.•\÷#@≤J\Èô^àS@ú\‡õ¶\œ\÷#@˛ö¨QàS@á¡¸2\◊#@\\›zMàS@T\≈T˙	\◊#@'),(4,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0xò\ˆ\Õ˝ÇS@&\√\Ò|\Ù#@â\ÏÉ,ÉS@b\ÿaL˙\Û#@è\√`˛\nÉS@\Û\∆Ia\ﬁ\Û#@1“ã\⁄˝ÇS@)YNB\È\Û#@xò\ˆ\Õ˝ÇS@&\√\Ò|\Ù#@'),(5,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0¢¥7¯\¬AS@Cp\\\∆M\ı%@Ø|ñ\Á¡AS@^/M\‡\Ù%@\Œ\0d\ÀAS@•¯¯Ñ\Ï\Ù%@\‘>\Õ\…AS@Q\˜H\ı%@¢¥7¯\¬AS@Cp\\\∆M\ı%@'),(6,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0d \œ.ﬂÑS@_ïï\≈#@\◊2é\ÁÑS@ªH°,|\≈#@2\Ã	\⁄\‰ÑS@D6ê.6\≈#@≠4)›ÑS@°\÷4\Ô8\≈#@d \œ.ﬂÑS@_ïï\≈#@'),(7,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0N∑\ÏˇâS@çF>Øx\Í#@&\√\Ò|äS@\‹d:t\Í#@Wï}WäS@Iº<ù+\Í#@`<ÉÜ˛âS@Z\Û\„/-\Í#@N∑\ÏˇâS@çF>Øx\Í#@'),(8,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0M\Ÿ\È~S@ZK\0˛\·#@IÖ±Ö ~S@™\’WW\‚#@Z\÷˝c!~S@X\«\ÒC•\·#@ä:s	~S@ﬁí∞´\·#@M\Ÿ\È~S@ZK\0˛\·#@'),(9,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0\'à∫@âS@•JîΩ•\‰#@qU\ŸwEâS@\∆O\„\ﬁ\‰#@t\\ç\ÏJâS@l?\„\√\‰#@\–#ÑGâS@í\ÏjÜ\‰#@\'à∫@âS@•JîΩ•\‰#@'),(10,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0îlu9%{S@\\\Â	Ñç#@•°F!{S@>\Ì\\◊dç#@iãk|&{S@v28J^ç#@^f\ÿ({S@\Ëyítç#@îlu9%{S@\\\Â	Ñç#@'),(11,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0d˘ÉÅyS@\ O™}:\÷$@ú\Zh>\ÁyS@iR\n∫Ω\‘$@\ÊñVC\‚yS@6ëô\‘$@wÜ©-uyS@B\Ì∑v¢\‘$@d˘ÉÅyS@\ O™}:\÷$@');
+INSERT INTO `regions` VALUES (1,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0sΩm¶B\‹#@êLáNœéS@Wµ§£\‹#@v®¶$\ÎéS@´\Èz¢\Î\⁄#@\\ìnK\‰éS@\”k≥±\€#@\ÈFXTƒéS@sΩm¶B\‹#@êLáNœéS@'),(2,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0\Ôè\˜™ï\È#@ò°\ÒDÜS@∂-\ lê\È#@\—\Èy7ÜS@\‹,^,\È#@a\ƒ>ÜS@Ω\»¸\Z\È#@\‚Èï≤ÜS@\Ôè\˜™ï\È#@ò°\ÒDÜS@'),(3,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0T\≈T˙	\◊#@\\›zMàS@\œ˘.•\÷#@¶\–yç]àS@ú\‡õ¶\œ\÷#@≤J\Èô^àS@á¡¸2\◊#@˛ö¨QàS@T\≈T˙	\◊#@\\›zMàS@'),(4,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0&\√\Ò|\Ù#@xò\ˆ\Õ˝ÇS@b\ÿaL˙\Û#@â\ÏÉ,ÉS@\Û\∆Ia\ﬁ\Û#@è\√`˛\nÉS@)YNB\È\Û#@1“ã\⁄˝ÇS@&\√\Ò|\Ù#@xò\ˆ\Õ˝ÇS@'),(5,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0Cp\\\∆M\ı%@¢¥7¯\¬AS@^/M\‡\Ù%@Ø|ñ\Á¡AS@•¯¯Ñ\Ï\Ù%@\Œ\0d\ÀAS@Q\˜H\ı%@\‘>\Õ\…AS@Cp\\\∆M\ı%@¢¥7¯\¬AS@'),(6,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0_ïï\≈#@d \œ.ﬂÑS@ªH°,|\≈#@\◊2é\ÁÑS@D6ê.6\≈#@2\Ã	\⁄\‰ÑS@°\÷4\Ô8\≈#@≠4)›ÑS@_ïï\≈#@d \œ.ﬂÑS@'),(7,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0çF>Øx\Í#@N∑\ÏˇâS@\‹d:t\Í#@&\√\Ò|äS@Iº<ù+\Í#@Wï}WäS@Z\Û\„/-\Í#@`<ÉÜ˛âS@çF>Øx\Í#@N∑\ÏˇâS@'),(8,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0ZK\0˛\·#@M\Ÿ\È~S@™\’WW\‚#@IÖ±Ö ~S@X\«\ÒC•\·#@Z\÷˝c!~S@ﬁí∞´\·#@ä:s	~S@ZK\0˛\·#@M\Ÿ\È~S@'),(9,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0•JîΩ•\‰#@\'à∫@âS@\∆O\„\ﬁ\‰#@qU\ŸwEâS@l?\„\√\‰#@t\\ç\ÏJâS@í\ÏjÜ\‰#@\–#ÑGâS@•JîΩ•\‰#@\'à∫@âS@'),(10,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0\\\Â	Ñç#@îlu9%{S@>\Ì\\◊dç#@•°F!{S@v28J^ç#@iãk|&{S@\Ëyítç#@^f\ÿ({S@\\\Â	Ñç#@îlu9%{S@'),(11,_binary '\Ê\0\0\0\0\0\0\0\0\0\0\0\ O™}:\÷$@d˘ÉÅyS@iR\n∫Ω\‘$@ú\Zh>\ÁyS@6ëô\‘$@\ÊñVC\‚yS@B\Ì∑v¢\‘$@wÜ©-uyS@\ O™}:\÷$@d˘ÉÅyS@');
 /*!40000 ALTER TABLE `regions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -205,6 +264,38 @@ LOCK TABLES `roles_users` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `shifts`
+--
+
+DROP TABLE IF EXISTS `shifts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `shifts` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `date` date DEFAULT NULL,
+  `end_time` time(6) DEFAULT NULL,
+  `start_time` time(6) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `approved_by` bigint DEFAULT NULL,
+  `assigned_by` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKfu30fy0eohstq2onrserye1gu` (`approved_by`),
+  KEY `FKnrm7f5exsw6aclun5a5russto` (`assigned_by`),
+  CONSTRAINT `FKfu30fy0eohstq2onrserye1gu` FOREIGN KEY (`approved_by`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `FKnrm7f5exsw6aclun5a5russto` FOREIGN KEY (`assigned_by`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `shifts`
+--
+
+LOCK TABLES `shifts` WRITE;
+/*!40000 ALTER TABLE `shifts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `shifts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user_roles`
 --
 
@@ -269,4 +360,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-10 13:36:12
+-- Dump completed on 2025-02-13 15:38:23
