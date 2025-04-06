@@ -2,7 +2,7 @@ package com.code_red.phc_attendance_system.entities;
 
 import java.util.Set;
 
-import org.hibernate.annotations.Cascade;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,6 +37,7 @@ public class Doctor {
 	    private String specialization;
 	    @ManyToOne
 	    @JoinColumn(name = "facility_id")
+	    @JsonIgnore
 	    private Facility facility;
 	    
 	    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -46,5 +48,7 @@ public class Doctor {
 	    )
 	    private Set<Role> roles;
 	    
+	    @OneToOne(cascade = CascadeType.ALL , orphanRemoval = true)
+	    private Shift shift;
 	    public Doctor() { }
 }

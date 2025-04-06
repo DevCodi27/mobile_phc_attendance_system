@@ -57,11 +57,13 @@ public class LoginController {
 		        Optional<AppUser> user = userService.findByEmail(email);
 		        Optional<Doctor> doctor = doctorService.findByEmail(email);
 		        Set<Role> roles;
-		        
+		        Long id;
 		        if (user.isPresent()) {
 		            roles = user.get().getRoles();
+		            id = user.get().getUserId();
 		        } else if (doctor.isPresent()) {
 		            roles = doctor.get().getRoles();
+		            id = doctor.get().getDoctorId();
 		        } else {
 		            throw new BadCredentialsException("User not found");
 		        }
@@ -71,7 +73,7 @@ public class LoginController {
 		                .collect(Collectors.toList());
 		        
 		        final String token = jwtUtil.generateToken(userDetails, roles);
-		        return ResponseEntity.ok(new AuthResponseDTO(token, roleNames));
+		        return ResponseEntity.ok(new AuthResponseDTO(token, roleNames.get(0), id));
 	        } catch (BadCredentialsException e) {
 	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
 	        }

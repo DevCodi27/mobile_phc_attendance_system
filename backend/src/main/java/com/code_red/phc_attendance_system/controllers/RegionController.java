@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.code_red.phc_attendance_system.dto.GPSResponseDTO;
+import com.code_red.phc_attendance_system.dto.LocationDTO;
 import com.code_red.phc_attendance_system.services.RegionService;
 
 @RestController
@@ -18,7 +19,7 @@ public class RegionController {
 	private RegionService regionService;
 	
 	@PostMapping("/validate")
-	public ResponseEntity<GPSResponseDTO> verifyGPSWithinRegion(@RequestBody Long latitude, Long longitude){
-		return new ResponseEntity<>(new GPSResponseDTO(regionService.findRegionByCoordinates(latitude, longitude)), HttpStatus.OK);
+	public ResponseEntity<GPSResponseDTO> verifyGPSWithinRegion(@RequestBody LocationDTO locationDTO){
+		return new ResponseEntity<>(new GPSResponseDTO(regionService.sendAlertIfOutsideRegion(locationDTO.getLatitude(), locationDTO.getLongitude())), HttpStatus.OK);
 	}
 }
