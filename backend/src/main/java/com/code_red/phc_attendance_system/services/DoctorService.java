@@ -1,7 +1,9 @@
 package com.code_red.phc_attendance_system.services;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +12,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.code_red.phc_attendance_system.dto.DoctorDTO;
+import com.code_red.phc_attendance_system.dto.FingerprintDTO;
 import com.code_red.phc_attendance_system.dto.ShiftDTO;
 import com.code_red.phc_attendance_system.entities.AppUser;
 import com.code_red.phc_attendance_system.entities.Doctor;
 import com.code_red.phc_attendance_system.entities.Facility;
+import com.code_red.phc_attendance_system.entities.Role;
 import com.code_red.phc_attendance_system.entities.Shift;
 import com.code_red.phc_attendance_system.enums.ShiftStatus;
 import com.code_red.phc_attendance_system.repositories.DoctorRepository;
@@ -34,6 +38,8 @@ public class DoctorService {
 	
 	
 	public Doctor register(DoctorDTO doctorDTO) {
+		Set<Role> roles = new HashSet<>();
+        roles.add(doctorDTO.getRole());
 		Doctor doctor = new Doctor();
 		doctor.setDoctorId(doctorDTO.getDoctorId());
 	    doctor.setFullName(doctorDTO.getName());
@@ -41,7 +47,7 @@ public class DoctorService {
 	    doctor.setPassword(passwordEncoder.encode(doctorDTO.getPassword())); // Encrypt password
 	    doctor.setSpecialization(doctorDTO.getSpecialization());
 	    doctor.setFacility(doctorDTO.getFacility());
-	    doctor.setRoles(doctorDTO.getRoles());
+	    doctor.setRoles(roles);
 		return doctorRepository.save(doctor);
 	}
 	
@@ -95,5 +101,19 @@ public class DoctorService {
 		    
 		    return doctorRepository.save(doctor);
 		   
+	    }
+
+	   
+	    public List<FingerprintDTO> getIdAndFingerprintByFacility(Facility facility) {
+	        List<Doctor> doctors = doctorRepository.findByFacility(facility);
+
+	        return doctors.stream()
+	                .map(doctor -> {
+	                    FingerprintDTO dto = new FingerprintDTO();
+	                    dto.setId(doctor.getDoctorId());
+	                    dto.setFingerprint(doctor.getFingerprint());
+	                    return dto;
+	                })
+	                .collect(Collectors.toList());
 	    }
 }

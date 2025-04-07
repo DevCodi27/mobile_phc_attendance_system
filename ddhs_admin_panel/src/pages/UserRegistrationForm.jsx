@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { registerUser } from "../services/UserService"; // Import function
-
+import axiosInstance from "../services/axiosInstance";
 const roleMapping = {
   DOCTOR_ROLE: { roleId: 1, name: "Doctor" },
   DHO_ROLE: { roleId: 2, name: "DHO" },

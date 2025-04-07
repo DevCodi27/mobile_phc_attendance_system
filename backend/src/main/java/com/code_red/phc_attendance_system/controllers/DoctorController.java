@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.code_red.phc_attendance_system.dto.DoctorDTO;
+import com.code_red.phc_attendance_system.dto.FingerprintDTO;
 import com.code_red.phc_attendance_system.dto.ShiftDTO;
 import com.code_red.phc_attendance_system.entities.AppUser;
 import com.code_red.phc_attendance_system.entities.Doctor;
@@ -50,23 +51,7 @@ public class DoctorController {
 		return doctorService.getAllDoctors();
 	}
 	
-//	@PutMapping("/{doctorId}/update-shift")
-//	public ResponseEntity<Doctor> updateDoctorShift(@PathVariable Long doctorId, @RequestBody ShiftDTO newShift) {
-//	    // Create a new Shift instance with provided details
-//	    Shift shift = new Shift();
-//	    shift.setDate(newShift.getDate());
-//	    shift.setStartTime(newShift.getStartTime());
-//	    shift.setEndTime(newShift.getEndTime());
-//	    shift.setStatus(ShiftStatus.PENDING); // Default status
-//	    
-//	    // Save the shift in the database
-//	    Shift savedShift = shiftRepository.save(shift);
-//	    
-//	    // Update the doctor's shift
-//	    Doctor updatedDoctor = doctorService.updateDoctorShift(doctorId, savedShift);
-//	    
-//	    return ResponseEntity.ok(updatedDoctor);
-//	}
+
 	
 	@PutMapping("/{doctorId}/update-shift")
 	public ResponseEntity<Doctor> updateDoctorShift(@PathVariable Long doctorId, 
@@ -96,4 +81,14 @@ public class DoctorController {
 	    return new ResponseEntity<>(doctors, HttpStatus.OK);
 	}
 
+	@GetMapping("/fingerprints/{facilityId}")
+	public ResponseEntity<List<FingerprintDTO>> getFingerprints(@PathVariable Long facilityId){
+		Facility facility = facilityService.findById(facilityId);
+	    
+	    if (facility == null) {
+	        return new ResponseEntity<>(Collections.emptyList(), HttpStatus.NOT_FOUND);
+	    }
+	    List<FingerprintDTO> fingerprints = doctorService.getIdAndFingerprintByFacility(facility);
+	    return new ResponseEntity<>(fingerprints, HttpStatus.OK);
+	}
 }

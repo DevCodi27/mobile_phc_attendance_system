@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.code_red.phc_attendance_system.dto.BmoDTO;
 import com.code_red.phc_attendance_system.dto.DhoDTO;
 import com.code_red.phc_attendance_system.dto.UserDTO;
+import com.code_red.phc_attendance_system.entities.Admin;
 import com.code_red.phc_attendance_system.entities.AppUser;
 import com.code_red.phc_attendance_system.entities.Bmo;
 import com.code_red.phc_attendance_system.entities.Dho;
@@ -68,8 +69,19 @@ public class UserService {
 	            dhoDTO.getDistrictName(),
 	            roles
 	        );
-	    } else {
-	        throw new IllegalArgumentException("User must have either BMO or DHO Received: " + roleName);
+	    }
+	    else {
+	    	Set<Role> roles = new HashSet<>();
+	        roles.add(userDTO.getRole());
+	        user = new Admin(
+	                userDTO.getUserId(),
+	                userDTO.getFullName(),
+	                userDTO.getEmail(),
+	                passwordEncoder.encode(userDTO.getPassword()),
+	                userDTO.getPhone(),
+	                roles // Assign roles directly
+	            );
+//	        throw new IllegalArgumentException("User must have either BMO or DHO Received: " + roleName);
 	    }
 
 	    return userRepository.save(user);
@@ -82,5 +94,9 @@ public class UserService {
 	
 	public Optional<AppUser> findDHO(String district){
 		return userRepository.findByDistrictAndRole(district);
+	}
+	
+	public AppUser findById(Long id) {
+		return userRepository.findById(id).get();
 	}
 }
