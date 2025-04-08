@@ -10,7 +10,8 @@ import lombok.Data;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "userType")
 @JsonSubTypes({
     @JsonSubTypes.Type(value = BmoDTO.class, name = "BMO"),
-    @JsonSubTypes.Type(value = DhoDTO.class, name = "DHO")
+    @JsonSubTypes.Type(value = DhoDTO.class, name = "DHO"),
+    @JsonSubTypes.Type(value = AdminDTO.class, name = "ADMIN")
 })
 public class UserDTO {
     private Long userId;

@@ -21,5 +21,4 @@ public class AttendanceController {
 	public ResponseEntity<Attendance> markAttendance(@PathVariable Long doctorId) {
 		return new ResponseEntity<>(attendanceService.markAttendance(doctorId), HttpStatus.CREATED);
 	}
-	
 }
