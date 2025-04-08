@@ -9,8 +9,12 @@ import Blocks from "./pages/Blocks";
 import NotFound from "./pages/NotFound";
 import FacilityList from "./pages/FacilityList";
 import DoctorList from "./pages/DoctorList";
+import DoctorRegistration from "./pages/DoctorRegistration";
 import RegisterUser from "./pages/UserRegistrationForm";
+import FacilityRegistrationForm from "./pages/FacilityRegistrationForm";
 import ProtectedRoute from "./components/ProtectedRoute";
+import 'leaflet/dist/leaflet.css';
+
 
 const router = createBrowserRouter([
   {
@@ -30,10 +34,15 @@ const router = createBrowserRouter([
     element: <Blocks />,
   },
   {
-    path: "/admin",
-    element: <ProtectedRoute allowedRoles={["ADMIN"]} />, // ✅ Protect Admin Route
-    children: [{ path: "/admin", element: <Admin /> }],
+    path: "/doctor-registration",
+    element: <DoctorRegistration />,
   },
+  {
+  path: "/admin",
+  element: <ProtectedRoute allowedRoles={["ADMIN"]} />,
+  children: [{ path: "/admin", element: <Admin /> }],
+},
+
   {
     path: "/bmo",
     element: <ProtectedRoute allowedRoles={["BMO"]} />, // ✅ Protect BMO Route
@@ -51,6 +60,9 @@ const router = createBrowserRouter([
     path: "/dho",
     element: <ProtectedRoute allowedRoles={["DHO"]} />, // ✅ Protect DHO Route
     children: [{ path: "/dho", element: <Dho /> }],
+  },{
+    path:"/register-phc",
+    element:<FacilityRegistrationForm />
   },
   {
     path: "*",

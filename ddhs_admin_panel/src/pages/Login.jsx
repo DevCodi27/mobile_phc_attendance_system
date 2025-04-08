@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from "../services/AuthService";
 import axios from 'axios'
+import axiosInstance from "../services/axiosInstance";
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,8 +27,9 @@ export default function Login() {
         } else if (response.role === 'DHO') {
           navigate('/blocks');
         }  else if (response.role === 'BMO') {
-          await fetchBmoDetails(response.id);
-          navigate('/bmo');
+          const bmo = await fetchBmoDetails(response.id);
+          // console.log(bmo);
+          navigate(`/${bmo.blockName}/facilities`);
         } else {
           navigate('/');
         }
@@ -45,10 +47,12 @@ export default function Login() {
   const fetchBmoDetails = async (bmoId) => {
     try {
       const token = localStorage.getItem('token'); // Retrieve token for authentication
-      const res = await axiosInstance.get(`/api/users/${bmoId}`);
+      const res = await axiosInstance.get(`/users/${bmoId}`);
       console.log('BMO Details:', res.data);
-      navigate(`/${res.data.blockName}/facilities`)
-      localStorage.setItem('bmoDetails', JSON.stringify(res.data));
+      // navigate(`/${res.data.blockName}/facilities`)
+      // console.log(res);
+      // localStorage.setItem('bmoDetails', JSON.stringify(res.data));
+      return res.data;
     } catch (error) {
       console.error('Error fetching BMO details:', error);
     }

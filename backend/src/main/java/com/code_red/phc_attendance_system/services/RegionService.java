@@ -26,6 +26,10 @@ public class RegionService {
 	@Autowired
 	private EmailService emailService;
 	
+	public Region save(Region region) {
+		return regionRepository.save(region);
+	}
+	
 	public boolean isDoctorInsideRegion(double latitude, double longitude) {
 	    UserDetails userDetails  = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	    Doctor doctor = doctorService.findByEmail(userDetails.getUsername()).orElse(null);
