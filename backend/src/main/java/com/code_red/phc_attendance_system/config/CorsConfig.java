@@ -12,12 +12,15 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**") // Allow all API endpoints
-                        .allowedOrigins("*") // Allow frontend
+                registry.addMapping("/**")
+                        .allowedOriginPatterns(
+                            "http://localhost:3000",       // React frontend (dev)
+                            "http://10.0.2.2:8080"         // Flutter emulator
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
-                }
+            }
         };
     }
 }

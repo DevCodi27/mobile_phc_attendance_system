@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.code_red.phc_attendance_system.dto.DoctorDTO;
+import com.code_red.phc_attendance_system.dto.DoctorRegistrationDTO;
 import com.code_red.phc_attendance_system.dto.FingerprintDTO;
 import com.code_red.phc_attendance_system.dto.ShiftDTO;
 import com.code_red.phc_attendance_system.entities.AppUser;
@@ -42,7 +43,7 @@ public class DoctorController {
 	private ShiftRepository shiftRepository;
 	
 	@PostMapping("/register")
-	public ResponseEntity<Doctor> registerDoctor(@RequestBody DoctorDTO doctordto) {	
+	public ResponseEntity<Doctor> registerDoctor(@RequestBody DoctorRegistrationDTO doctordto) {	
 		return new ResponseEntity<>(doctorService.register(doctordto), HttpStatus.CREATED);
 	}
 	

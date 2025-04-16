@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.code_red.phc_attendance_system.dto.FacilityNameDTO;
 import com.code_red.phc_attendance_system.entities.Facility;
 import com.code_red.phc_attendance_system.repositories.FacilityRepository;
 
@@ -31,6 +32,10 @@ public class FacilityService {
 	public Facility save(Facility facility) {
 		return facilityRepository.save(facility);
 	}
+	
+	public List<FacilityNameDTO> getAllFacilityNames() {
+        return facilityRepository.findAllFacilityNames();
+    }
 	
 //	public Facility findByBlock(String block) {
 //	    return facilityRepository.findByBlock(block);

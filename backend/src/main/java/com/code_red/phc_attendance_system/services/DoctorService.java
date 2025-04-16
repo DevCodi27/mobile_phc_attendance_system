@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.code_red.phc_attendance_system.dto.DoctorDTO;
+import com.code_red.phc_attendance_system.dto.DoctorRegistrationDTO;
 import com.code_red.phc_attendance_system.dto.FingerprintDTO;
 import com.code_red.phc_attendance_system.dto.ShiftDTO;
 import com.code_red.phc_attendance_system.entities.AppUser;
@@ -21,6 +22,7 @@ import com.code_red.phc_attendance_system.entities.Role;
 import com.code_red.phc_attendance_system.entities.Shift;
 import com.code_red.phc_attendance_system.enums.ShiftStatus;
 import com.code_red.phc_attendance_system.repositories.DoctorRepository;
+import com.code_red.phc_attendance_system.repositories.RoleRepository;
 import com.code_red.phc_attendance_system.repositories.ShiftRepository;
 
 import jakarta.transaction.Transactional;
@@ -36,17 +38,24 @@ public class DoctorService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	@Autowired
+	private FacilityService facilityService;
 	
-	public Doctor register(DoctorDTO doctorDTO) {
+	@Autowired
+	private RoleRepository roleRepository;
+	
+	public Doctor register(DoctorRegistrationDTO doctorDTO) {
+		Role role = roleRepository.findById(doctorDTO.getRole().getRoleId())
+                .orElseThrow(() -> new RuntimeException("Role not found"));
 		Set<Role> roles = new HashSet<>();
-        roles.add(doctorDTO.getRole());
+        roles.add(role);
 		Doctor doctor = new Doctor();
-		doctor.setDoctorId(doctorDTO.getDoctorId());
+		Facility facility = facilityService.findById(doctorDTO.getFacility());
 	    doctor.setFullName(doctorDTO.getName());
 	    doctor.setEmail(doctorDTO.getEmail());
 	    doctor.setPassword(passwordEncoder.encode(doctorDTO.getPassword())); // Encrypt password
 	    doctor.setSpecialization(doctorDTO.getSpecialization());
-	    doctor.setFacility(doctorDTO.getFacility());
+	    doctor.setFacility(facility);
 	    doctor.setRoles(roles);
 		return doctorRepository.save(doctor);
 	}
