@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.code_red.phc_attendance_system.dto.FacilityDTO;
+import com.code_red.phc_attendance_system.dto.FacilityNameDTO;
 import com.code_red.phc_attendance_system.entities.Facility;
 import com.code_red.phc_attendance_system.entities.Region;
 import com.code_red.phc_attendance_system.services.FacilityService;
@@ -55,5 +56,8 @@ public class FacilityContoller {
         return ResponseEntity.ok(facility);
     }
 
-
+    @GetMapping("/names")
+    public ResponseEntity<List<FacilityNameDTO>> getFacilityNames() {
+        return new ResponseEntity<>(facilityService.getAllFacilityNames(),HttpStatus.ACCEPTED);
+    }
 }
