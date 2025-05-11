@@ -65,23 +65,21 @@ public class AttendanceService {
         System.out.println("Absent doctors marked at 10 AM.");
     } 
     
-    public Map<Facility, List<Attendance>> getAttendanceOfDoctors() {
-        Dho user = (Dho)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String district = user.getDistrict();
-        LocalDate today = LocalDate.now();
-        List<Facility> facilities = facilityRepository.findByDistrict(district);
-        Map<Facility, List<Attendance>> attendance = new HashMap<>();
-        LocalDate date = LocalDate.now();
-        for(Facility facility: facilities) {
-        	List<Doctor> doctors = doctorRepository.findByFacility(facility);
-        	List<Attendance> attendances = new ArrayList<>();
-        	for(Doctor doctor: doctors) {
-        		Attendance att = attendanceRepository.findByDoctorAndDate(doctor, date);
-        		attendances.add(att);
-        	}
-        	attendance.put(facility, attendances);
-        }
-
-        return attendance;
-    }
+//    public Map<Facility, List<Attendance>> getAttendanceOfDoctors() {
+//        LocalDate today = LocalDate.now();
+//        List<Facility> facilities = facilityRepository.findAllFacilities();
+//        Map<Facility, List<Attendance>> attendance = new HashMap<>();
+//        LocalDate date = LocalDate.now();
+//        for(Facility facility: facilities) {
+//        	List<Doctor> doctors = doctorRepository.findByFacility(facility);
+//        	List<Attendance> attendances = new ArrayList<>();
+//        	for(Doctor doctor: doctors) {
+//        		Attendance att = attendanceRepository.findByDoctorAndDate(doctor, date);
+//        		attendances.add(att);
+//        	}
+//        	attendance.put(facility, attendances);
+//        }
+//
+//        return attendance;
+//    }
 }

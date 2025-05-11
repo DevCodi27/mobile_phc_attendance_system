@@ -14,8 +14,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class Dho extends AppUser {
     
-    @Column(nullable = false)
-    private String district;  // ✅ This must exist
+	@Column(nullable = false, unique = true)
+	private String district;
 
     public Dho() {
         super();

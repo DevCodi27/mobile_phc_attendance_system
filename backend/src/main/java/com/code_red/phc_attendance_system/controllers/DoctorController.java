@@ -1,6 +1,8 @@
+
 package com.code_red.phc_attendance_system.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,11 +53,13 @@ public class DoctorController {
 	public List<Doctor> getAllDoctors(){
 		return doctorService.getAllDoctors();
 	}
-	
-
+	@GetMapping("/{id}")
+	public ResponseEntity<Doctor> getDoctorById(@PathVariable Long id){
+		return new ResponseEntity<>(doctorService.getDoctorById(id),HttpStatus.OK);
+	}
 	
 	@PutMapping("/{doctorId}/update-shift")
-	public ResponseEntity<Doctor> updateDoctorShift(@PathVariable Long doctorId, 
+	public ResponseEntity<Doctor> updateDoctorShift(@PathVariable Long doctorId, @RequestBody Long bmoId,
 	                                                @RequestBody ShiftDTO newShift) { 
 	    if (doctorId == null) {
 	        throw new IllegalArgumentException("Doctor ID cannot be null");
@@ -70,7 +74,7 @@ public class DoctorController {
 
 	
 	@GetMapping("/{facilityId}/doctors")
-	public ResponseEntity<List<DoctorDTO>> getDoctorsByBlock(@PathVariable Long facilityId) {  
+	public ResponseEntity<List<DoctorDTO>> getDoctorsByFacility(@PathVariable Long facilityId) {  
 	    Facility facility = facilityService.findById(facilityId);
 	    
 	    if (facility == null) {
@@ -81,6 +85,17 @@ public class DoctorController {
 	   
 	    return new ResponseEntity<>(doctors, HttpStatus.OK);
 	}
+	
+    @GetMapping("/block/{blockName}/doctors")
+    public ResponseEntity<Map<String, List<DoctorDTO>>> getDoctorsByBlock(@PathVariable String blockName) {
+        Map<String, List<DoctorDTO>> result = doctorService.getDoctorsGroupedByBlock(blockName);
+
+        if (result.get(blockName).isEmpty()) {
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
 	@GetMapping("/fingerprints/{facilityId}")
 	public ResponseEntity<List<FingerprintDTO>> getFingerprints(@PathVariable Long facilityId){

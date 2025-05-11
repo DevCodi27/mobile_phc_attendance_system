@@ -1,7 +1,11 @@
 package com.code_red.phc_attendance_system.services;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,6 +20,8 @@ import com.code_red.phc_attendance_system.dto.DoctorRegistrationDTO;
 import com.code_red.phc_attendance_system.dto.FingerprintDTO;
 import com.code_red.phc_attendance_system.dto.ShiftDTO;
 import com.code_red.phc_attendance_system.entities.AppUser;
+import com.code_red.phc_attendance_system.entities.Bmo;
+import com.code_red.phc_attendance_system.entities.Dho;
 import com.code_red.phc_attendance_system.entities.Doctor;
 import com.code_red.phc_attendance_system.entities.Facility;
 import com.code_red.phc_attendance_system.entities.Role;
@@ -25,6 +31,7 @@ import com.code_red.phc_attendance_system.repositories.DoctorRepository;
 import com.code_red.phc_attendance_system.repositories.RoleRepository;
 import com.code_red.phc_attendance_system.repositories.ShiftRepository;
 
+import io.jsonwebtoken.lang.Collections;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -41,6 +48,8 @@ public class DoctorService {
 	@Autowired
 	private FacilityService facilityService;
 	
+	@Autowired
+	private UserService userService;
 	@Autowired
 	private RoleRepository roleRepository;
 	
@@ -82,35 +91,50 @@ public class DoctorService {
 		return doctorRepository.findById(id).get();
 	}
 	
-	 @Transactional
-	    public Doctor updateDoctorShift(Long doctorId, ShiftDTO newShift) {
-		 Doctor doctor = getDoctorById(doctorId);
-		    AppUser user = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	@Transactional
+	public Doctor updateDoctorShift(Long doctorId, ShiftDTO newShift) {
+	    Doctor doctor = getDoctorById(doctorId);
 
-		    // Allow BMO to edit shift
-		    if (user.getRoles().contains("BMO")) {
-		        Shift shift = new Shift();
-		        shift.setDate(newShift.getDate());
-		        shift.setStartTime(newShift.getStartTime());
-		        shift.setEndTime(newShift.getEndTime());
-		        shift.setStatus(ShiftStatus.PENDING);
-		        shift.setAssignedBy(user); // Track who assigned it
-		        Shift savedShift = shiftRepository.save(shift);
-		        doctor.setShift(savedShift);
-		    }
+	    Bmo assignedBy = (Bmo)userService.findById(newShift.getAssignedBy());
 
-		    // Allow DHO to verify shift
-		    if (user.getRoles().contains("DHO")) {
-		        if (doctor.getShift() != null) {
-		            doctor.getShift().setStatus(ShiftStatus.APPROVED);
-		            doctor.getShift().setApprovedBy(user);
-		            shiftRepository.save(doctor.getShift());
-		        }
-		    }
-		    
-		    return doctorRepository.save(doctor);
-		   
+	    Dho approvedBy = null;
+	    if (newShift.getApprovedBy() != null) {
+	        approvedBy = (Dho)userService.findById(newShift.getApprovedBy());
 	    }
+
+	    Shift shift = new Shift();
+	    shift.setDate(newShift.getDate());
+	    shift.setStartTime(newShift.getStartTime());
+	    shift.setEndTime(newShift.getEndTime());
+	    shift.setStatus(ShiftStatus.PENDING);
+	    shift.setAssignedBy(assignedBy);
+	    shift.setApprovedBy(approvedBy);
+
+	    Shift savedShift = shiftRepository.save(shift);
+	    doctor.setShift(savedShift);
+
+	    return doctorRepository.save(doctor);
+	}
+	
+    public Map<String, List<DoctorDTO>> getDoctorsGroupedByBlock(String blockName) {
+        List<Facility> facilities = facilityService.findByBlock(blockName);
+
+        if (facilities == null || facilities.isEmpty()) {
+            return Map.of(blockName, Collections.emptyList());
+        }
+
+        List<Doctor> doctors = doctorRepository.findByFacilityIn(facilities);
+        
+        List<DoctorDTO> doctorDTOs = new ArrayList<>();
+        for (Doctor doctor : doctors) {
+            DoctorDTO dto = new DoctorDTO(doctor);
+            doctorDTOs.add(dto);
+        }
+
+        Map<String, List<DoctorDTO>> result = new HashMap<>();
+        result.put(blockName, doctorDTOs);
+        return result;
+    }
 
 	   
 	    public List<FingerprintDTO> getIdAndFingerprintByFacility(Facility facility) {

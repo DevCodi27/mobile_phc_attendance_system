@@ -1,4 +1,5 @@
 package com.code_red.phc_attendance_system.config;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 import java.util.List;
 
@@ -37,20 +38,14 @@ public class SecurityConfig {
 	    @Bean
 	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	        return http
-	        		.cors(cors -> cors.configurationSource(request -> {
-	                    var corsConfig = new org.springframework.web.cors.CorsConfiguration();
-	                    corsConfig.setAllowedOrigins(List.of("http://localhost:5173")); // Allow frontend
-	                    corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-	                    corsConfig.setAllowedHeaders(List.of("*"));
-	                    corsConfig.setAllowCredentials(true);
-	                    return corsConfig;
-	                }))
+	        		.cors(withDefaults())
 	                .csrf(csrf -> csrf.disable())
 	                .authorizeHttpRequests(auth -> 
 	                			auth	
 	                				.requestMatchers("/login").permitAll()
 	                				.requestMatchers("/doctors/register").permitAll()
 	                				.requestMatchers("/users/register").permitAll()
+	                			    .requestMatchers("/api/bmo/**").hasAuthority("BMO")
 	                				.anyRequest().authenticated()
 	                		)
 	                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

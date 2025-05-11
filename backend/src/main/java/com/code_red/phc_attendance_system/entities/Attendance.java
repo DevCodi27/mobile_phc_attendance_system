@@ -30,7 +30,7 @@ public class Attendance {
 	private Doctor doctor;
 	
 	private LocalTime checkInTime;
-	
+	private Integer missedCounts;
 	private LocalTime checkOutTime;
 	private LocalDate date;
 	private AttendanceStatus status;

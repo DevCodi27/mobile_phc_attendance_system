@@ -10,7 +10,8 @@ const DoctorList = () => {
   const [shiftUpdates, setShiftUpdates] = useState({});
   const [editing, setEditing] = useState({});
   const [userRole, setUserRole] = useState("BMO"); // Mock role, replace with actual role fetching logic
-
+   // Mock BMO ID, replace with actual fetching logic
+  // console.log(localStorage.getItem("id"));
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
@@ -27,20 +28,34 @@ const DoctorList = () => {
     fetchDoctors();
   }, [facilityId]);
 
-  const updateShift = async (doctorId) => {
-    try {
-      const response = await axiosInstance.put(`/api/doctors/${doctorId}/update-shift`, {
-        startTime: shiftUpdates[doctorId]?.startTime || "",
-        endTime: shiftUpdates[doctorId]?.endTime || ""
-      });
-      alert("Shift updated successfully");
-      setEditing((prev) => ({ ...prev, [doctorId]: false }));
-      console.log(response.data);
-    } catch (err) {
-      console.error("Error updating shift:", err);
-      alert("Failed to update shift");
-    }
-  };
+  const [bmoId, setBmoId] = useState(localStorage.getItem("id"));
+const bmoIdAsNumber = bmoId ? parseInt(bmoId) : null;
+
+if (!bmoIdAsNumber) {
+  alert("Invalid or missing BMO ID.");
+  return; // Exit early if BMO ID is not valid
+}
+
+const updateShift = async (doctorId) => {
+  try {
+    const response = await axiosInstance.put(`/api/doctors/${doctorId}/update-shift`, {
+      date: new Date().toISOString().split("T")[0],  // today's date
+      startTime: shiftUpdates[doctorId]?.startTime || "00:00:00",  // default to midnight if not provided
+      endTime: shiftUpdates[doctorId]?.endTime || "00:00:00",  // default to midnight if not provided
+      status: "PENDING",
+      assignedBy: 50,  // parseInt(bmoId) moved to earlier stage
+      approvedBy: 80
+    });
+
+    alert("Shift updated successfully");
+    setEditing((prev) => ({ ...prev, [doctorId]: false }));
+    console.log(response.data);
+  } catch (err) {
+    console.error("Error updating shift:", err.response ? err.response.data : err.message);
+    alert("Failed to update shift");
+  }
+};
+
 
   const verifyShift = async (doctorId) => {
     try {
@@ -111,14 +126,6 @@ const DoctorList = () => {
                     Edit Shift
                   </button>
                 )
-              )}
-              {userRole === "DHO" && (
-                <button
-                  onClick={() => verifyShift(doctor.doctorId)}
-                  className="bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-600"
-                >
-                  Verify Shift
-                </button>
               )}
             </li>
           ))}
