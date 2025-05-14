@@ -119,7 +119,7 @@ export default function Dho() {
                 </div>
               </div>
               <div className="mt-6">
-                <button className="w-full flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                <button className="w-full flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500" onClick={() => navigate('/pending-shifts')}>
                   Verify Shifts
                 </button>
               </div>
@@ -127,25 +127,7 @@ export default function Dho() {
           </div>
         </div>
 
-        {/* Recent Activity Section */}
-        <div className="mt-8 bg-white shadow overflow-hidden sm:rounded-lg">
-          <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-            <h3 className="text-lg leading-6 font-medium text-gray-900">
-              Recent Activity
-            </h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Overview of recent system activities
-            </p>
-          </div>
-          <div className="px-4 py-5 sm:p-6">
-            <div className="text-center text-gray-500 py-8">
-              <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              <p className="mt-2 text-sm">No recent activity to display</p>
-            </div>
-          </div>
-        </div>
+        
       </main>
     </div>
   );

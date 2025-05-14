@@ -16,6 +16,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import 'leaflet/dist/leaflet.css';
 import PendingShifts from "./pages/PendingShifts"
 import DoctorsInBlock from "./pages/DoctorsInBlock"
+import AllDoctorsList from "./pages/AllDoctorsList"
+import AllFacilitiesList from "./pages/AllFacilitiesList"
 import './index.css';
 
 
@@ -39,6 +41,15 @@ const router = createBrowserRouter([
   {
     path: "/doctor-registration",
     element: <DoctorRegistration />,
+  },
+  {
+     path: "/doctors",
+    element: <AllDoctorsList />,
+  },
+  
+  {
+     path: "/facilities",
+    element: <AllFacilitiesList />,
   },
   {
   path: "/admin",

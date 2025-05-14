@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.code_red.phc_attendance_system.dto.ShiftDTO;
 import com.code_red.phc_attendance_system.entities.Shift;
 import com.code_red.phc_attendance_system.services.ShiftService;
 
