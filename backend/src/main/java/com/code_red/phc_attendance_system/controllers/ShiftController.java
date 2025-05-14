@@ -14,11 +14,11 @@ import com.code_red.phc_attendance_system.services.ShiftService;
 @RequestMapping("/api/shifts")
 public class ShiftController {
 
-    @Autowired
-    private ShiftService shiftService;
+	@Autowired
+	private ShiftService shiftService;
 
-    @GetMapping("/pending")
-    public List<Shift> getPendingShifts() {
-        return shiftService.getPendingShifts();
-    }
+	@GetMapping("/pending")
+	public List<Shift> getPendingShifts() {
+		return shiftService.getPendingShifts();
+	}
 }

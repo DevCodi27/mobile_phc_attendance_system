@@ -11,17 +11,16 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class BmoService {
 
-    @Autowired
-    private BmoRepository bmoRepository;
+	@Autowired
+	private BmoRepository bmoRepository;
 
-    public Bmo getBmoByBlockName(String blockName) {
-        return bmoRepository.findByBlockName(blockName)
-                .orElseThrow(() -> new EntityNotFoundException("BMO not found with block name: " + blockName));
-    }
-    
-    public Bmo findById(Long id) {
-        return bmoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("BMO not found with id: " + id));
-    }
+	public Bmo getBmoByBlockName(String blockName) {
+		return bmoRepository.findByBlockName(blockName)
+				.orElseThrow(() -> new EntityNotFoundException("BMO not found with block name: " + blockName));
+	}
+
+	public Bmo findById(Long id) {
+		return bmoRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("BMO not found with id: " + id));
+	}
 }
-

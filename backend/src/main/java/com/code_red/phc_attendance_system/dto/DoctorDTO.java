@@ -11,21 +11,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DoctorDTO {
-    private Long doctorId;
-    private String name;
-    private String password;
-    private String email;
-    private String specialization;
-    private Facility facility;
-    private Role role;
+	private Long doctorId;
+	private String name;
+	private String password;
+	private String email;
+	private String specialization;
+	private Facility facility;
+	private Role role;
 
-    public DoctorDTO(Doctor doctor) {
-        this.doctorId = doctor.getDoctorId();
-        this.email = doctor.getEmail();
-        this.name = doctor.getFullName();
-        this.password = doctor.getPassword();
-        this.specialization = doctor.getSpecialization();
-        this.facility = doctor.getFacility();
-        this.role = doctor.getRoles().iterator().next(); // Get the first role
-    }
+	public DoctorDTO(Doctor doctor) {
+		this.doctorId = doctor.getDoctorId();
+		this.email = doctor.getEmail();
+		this.name = doctor.getFullName();
+		this.password = doctor.getPassword();
+		this.specialization = doctor.getSpecialization();
+		this.facility = doctor.getFacility();
+		this.role = doctor.getRoles().iterator().next(); // Get the first role
+	}
 }

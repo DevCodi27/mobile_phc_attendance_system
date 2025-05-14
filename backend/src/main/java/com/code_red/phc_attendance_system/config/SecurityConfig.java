@@ -1,4 +1,5 @@
 package com.code_red.phc_attendance_system.config;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import java.util.List;
@@ -24,46 +25,40 @@ import com.code_red.phc_attendance_system.util.JwtUtil;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-	 @Autowired
-	    private JwtUtil jwtUtil;
+	@Autowired
+	private JwtUtil jwtUtil;
 
-	    @Autowired
-	    private CustomUserDetailsService userDetailsService;
+	@Autowired
+	private CustomUserDetailsService userDetailsService;
 
-	    @Bean
-	    public PasswordEncoder passwordEncoder() {
-	    	return new BCryptPasswordEncoder();
-	    }
-	    
-	    @Bean
-	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	        return http
-	        		.cors(withDefaults())
-	                .csrf(csrf -> csrf.disable())
-	                .authorizeHttpRequests(auth -> 
-	                			auth	
-	                				.requestMatchers("/login").permitAll()
-	                				.requestMatchers("/doctors/register").permitAll()
-	                				.requestMatchers("/users/register").permitAll()
-	                			    .requestMatchers("/api/bmo/**").hasAuthority("BMO")
-	                				.anyRequest().authenticated()
-	                		)
-	                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-	                .addFilterBefore(new JwtFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class)
-	                .build();
-	    }
-	    
-	    @Bean
-	    public AuthenticationProvider authenticationProvider() {
-	    	DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-	    	provider.setPasswordEncoder(passwordEncoder());
-	    	provider.setUserDetailsService(userDetailsService);
-	    	return provider;
-	    }
-	    
-	    @Bean
-	    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-	        return authenticationConfiguration.getAuthenticationManager();
-	    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		return http.cors(withDefaults()).csrf(csrf -> csrf.disable())
+				.authorizeHttpRequests(auth -> auth.requestMatchers("/login").permitAll()
+						.requestMatchers("/doctors/register").permitAll().requestMatchers("/users/register").permitAll()
+						.requestMatchers("/api/bmo/**").hasAuthority("BMO").anyRequest().authenticated())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.addFilterBefore(new JwtFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class)
+				.build();
+	}
+
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setPasswordEncoder(passwordEncoder());
+		provider.setUserDetailsService(userDetailsService);
+		return provider;
+	}
+
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+			throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
 
 }

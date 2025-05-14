@@ -26,18 +26,18 @@ import com.code_red.phc_attendance_system.repositories.FacilityRepository;
 public class AttendanceService {
 	@Autowired
 	private AttendanceRepository attendanceRepository;
-	
+
 	@Autowired
 	private DoctorRepository doctorRepository;
-	
+
 	@Autowired
 	private FacilityRepository facilityRepository;
-	
-	private	List<Attendance> getAttendanceByToday(){
+
+	private List<Attendance> getAttendanceByToday() {
 		LocalDate today = LocalDate.now();
 		return attendanceRepository.findByDate(today);
 	}
-	
+
 	public Attendance markAttendance(Long id) {
 		Attendance attendance = new Attendance();
 		attendance.setStatus(AttendanceStatus.PRESENT);
@@ -46,25 +46,25 @@ public class AttendanceService {
 		attendance.setDate(LocalDate.now());
 		return attendanceRepository.save(attendance);
 	}
-	
-    @Scheduled(cron = "0 0 10 * * *")
-    public void markAbsentDoctors() {
-        LocalDate today = LocalDate.now();
 
-        List<Doctor> allDoctors = doctorRepository.findAll();
-        for (Doctor doctor : allDoctors) {
-            boolean hasAttendance = attendanceRepository.existsByDoctorAndDate(doctor, today);
-            if (!hasAttendance) {
-                Attendance attendance = new Attendance();
-                attendance.setDoctor(doctor);
-                attendance.setDate(today);
-                attendance.setStatus(AttendanceStatus.ABSENT);
-                attendanceRepository.save(attendance);
-            }
-        }
-        System.out.println("Absent doctors marked at 10 AM.");
-    } 
-    
+	@Scheduled(cron = "0 0 10 * * *")
+	public void markAbsentDoctors() {
+		LocalDate today = LocalDate.now();
+
+		List<Doctor> allDoctors = doctorRepository.findAll();
+		for (Doctor doctor : allDoctors) {
+			boolean hasAttendance = attendanceRepository.existsByDoctorAndDate(doctor, today);
+			if (!hasAttendance) {
+				Attendance attendance = new Attendance();
+				attendance.setDoctor(doctor);
+				attendance.setDate(today);
+				attendance.setStatus(AttendanceStatus.ABSENT);
+				attendanceRepository.save(attendance);
+			}
+		}
+		System.out.println("Absent doctors marked at 10 AM.");
+	}
+
 //    public Map<Facility, List<Attendance>> getAttendanceOfDoctors() {
 //        LocalDate today = LocalDate.now();
 //        List<Facility> facilities = facilityRepository.findAllFacilities();

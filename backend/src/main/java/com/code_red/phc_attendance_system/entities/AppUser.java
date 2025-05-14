@@ -22,34 +22,29 @@ import lombok.Data;
 @Inheritance(strategy = InheritanceType.JOINED) // Creates separate tables
 public abstract class AppUser {
 
-	    @Id
-	    private Long userId;
-	    private String fullName;
-	    
-	    @Column(unique = true, nullable = false)
-	    private String email;
-	    
-	    private String password;
-	    
-	    private String phone;
-	    
-	    @ManyToMany(fetch = FetchType.EAGER)
-	    @JoinTable(
-	        name = "user_roles",
-	        joinColumns = @JoinColumn(name = "user_id"),
-	        inverseJoinColumns = @JoinColumn(name = "role_id")
-	    )
-	    private Set<Role> roles;
-	    
-	  
-	    public AppUser() {}
+	@Id
+	private Long userId;
+	private String fullName;
 
-	    public AppUser(Long id, String email, String password, Set<Role> role) {
-	        this.userId = id;
-	        this.email = email;
-	        this.password = password;
-	        this.roles = role;  // ✅ Initialize Set 
-	    }
+	@Column(unique = true, nullable = false)
+	private String email;
 
-	   
+	private String password;
+
+	private String phone;
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles;
+
+	public AppUser() {
+	}
+
+	public AppUser(Long id, String email, String password, Set<Role> role) {
+		this.userId = id;
+		this.email = email;
+		this.password = password;
+		this.roles = role; // ✅ Initialize Set
+	}
+
 }

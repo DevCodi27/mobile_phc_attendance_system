@@ -11,16 +11,17 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Bmo extends AppUser {
-    
-    @Column(nullable = false)
-    private String blockName;  // ✅ This must exist
 
-    public Bmo() {
-        super();
-    }
+	@Column(nullable = false)
+	private String blockName; // ✅ This must exist
 
-    public Bmo(Long userId, String fullName, String email, String password, String phone, String blockName, Set<Role> roles) {
-        super(userId, fullName, email,  password, phone, roles);
-        this.blockName = blockName;
-    }
+	public Bmo() {
+		super();
+	}
+
+	public Bmo(Long userId, String fullName, String email, String password, String phone, String blockName,
+			Set<Role> roles) {
+		super(userId, fullName, email, password, phone, roles);
+		this.blockName = blockName;
+	}
 }

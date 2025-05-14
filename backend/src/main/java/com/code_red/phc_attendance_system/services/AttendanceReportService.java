@@ -11,13 +11,12 @@ import com.code_red.phc_attendance_system.util.PdfGenerator;
 @Service
 public class AttendanceReportService {
 
-    @Autowired
-    private AttendanceService attendanceService;
+	@Autowired
+	private AttendanceService attendanceService;
 
-    public byte[] generateReportForDate(LocalDate date) {
+	public byte[] generateReportForDate(LocalDate date) {
 //        List<Attendance> records = attendanceService.getAttendanceOfDoctors()
 //        return PdfGenerator.generateAttendanceReport(records, date);
-    	return null;
-    }
+		return null;
+	}
 }
-

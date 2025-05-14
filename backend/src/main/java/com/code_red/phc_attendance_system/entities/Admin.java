@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Admin extends AppUser {
 	public Admin(Long userId, String fullName, String email, String password, String phone, Set<Role> roles) {
-        super(userId, fullName, email, password, phone, roles);
-    }
+		super(userId, fullName, email, password, phone, roles);
+	}
 }

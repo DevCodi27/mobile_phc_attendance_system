@@ -14,14 +14,14 @@ import lombok.Data;
 @AllArgsConstructor
 public class ShiftDTO {
 	private LocalDate date;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private Long assignedBy;
-    private Long approvedBy;
-    
-    
-    private ShiftStatus status;
+	private LocalTime startTime;
+	private LocalTime endTime;
+	private Long assignedBy;
+	private Long approvedBy;
 
-	public ShiftDTO() {}
+	private ShiftStatus status;
+
+	public ShiftDTO() {
+	}
 
 }

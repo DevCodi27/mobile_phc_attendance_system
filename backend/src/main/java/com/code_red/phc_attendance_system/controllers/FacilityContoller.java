@@ -25,39 +25,40 @@ import com.code_red.phc_attendance_system.util.PolygonConverter;
 public class FacilityContoller {
 	@Autowired
 	private FacilityService facilityService;
-	
+
 	@Autowired
 	private RegionService regionService;
+
 	@GetMapping("/blocks")
-	private ResponseEntity<List<String>> getAllBlocks(){
+	private ResponseEntity<List<String>> getAllBlocks() {
 		return new ResponseEntity<>(facilityService.getAllBlocks(), HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/{block}/facilities")
-	private ResponseEntity<List<Facility>> getFacilitiesByBlock(@PathVariable String block){
+	private ResponseEntity<List<Facility>> getFacilitiesByBlock(@PathVariable String block) {
 		return new ResponseEntity<>(facilityService.findByBlock(block), HttpStatus.OK);
 	}
-	
-    @PostMapping("/register")
-    public ResponseEntity<Facility> registerFacility(@RequestBody FacilityDTO dto) {
-        Region region = new Region();
-        region.setBoundary(PolygonConverter.convertToPolygon(dto.getRegion()));
-        regionService.save(region);
 
-        Facility facility = new Facility();
-        facility.setName(dto.getName());
-        facility.setBlock(dto.getBlock());
-        facility.setDistrict(dto.getDistrict());
-        facility.setFaciliy_type(dto.getFacilityType());
-        facility.setRegion(region);
+	@PostMapping("/register")
+	public ResponseEntity<Facility> registerFacility(@RequestBody FacilityDTO dto) {
+		Region region = new Region();
+		region.setBoundary(PolygonConverter.convertToPolygon(dto.getRegion()));
+		regionService.save(region);
 
-        facilityService.save(facility);
+		Facility facility = new Facility();
+		facility.setName(dto.getName());
+		facility.setBlock(dto.getBlock());
+		facility.setDistrict(dto.getDistrict());
+		facility.setFaciliy_type(dto.getFacilityType());
+		facility.setRegion(region);
 
-        return ResponseEntity.ok(facility);
-    }
+		facilityService.save(facility);
 
-    @GetMapping("/names")
-    public ResponseEntity<List<FacilityNameDTO>> getFacilityNames() {
-        return new ResponseEntity<>(facilityService.getAllFacilityNames(),HttpStatus.ACCEPTED);
-    }
+		return ResponseEntity.ok(facility);
+	}
+
+	@GetMapping("/names")
+	public ResponseEntity<List<FacilityNameDTO>> getFacilityNames() {
+		return new ResponseEntity<>(facilityService.getAllFacilityNames(), HttpStatus.ACCEPTED);
+	}
 }

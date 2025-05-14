@@ -8,20 +8,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailServiceImpl {
-	
+
 	@Value("${spring.mail.username}")
 	private String fromMail;
-	
-	 @Autowired
-	 private JavaMailSender mailSender;
+
+	@Autowired
+	private JavaMailSender mailSender;
 
 	public void sendEmail(String to, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(fromMail); // Must be the same as your Gmail account
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-        mailSender.send(message);
-    }
-    
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom(fromMail); // Must be the same as your Gmail account
+		message.setTo(to);
+		message.setSubject(subject);
+		message.setText(body);
+		mailSender.send(message);
+	}
+
 }

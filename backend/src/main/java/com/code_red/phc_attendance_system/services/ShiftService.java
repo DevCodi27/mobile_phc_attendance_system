@@ -12,11 +12,10 @@ import com.code_red.phc_attendance_system.repositories.ShiftRepository;
 @Service
 public class ShiftService {
 
-    @Autowired
-    private ShiftRepository shiftRepository;
+	@Autowired
+	private ShiftRepository shiftRepository;
 
-    public List<Shift> getPendingShifts() {
-        return shiftRepository.findByStatus(ShiftStatus.PENDING);
-    }
+	public List<Shift> getPendingShifts() {
+		return shiftRepository.findByStatus(ShiftStatus.PENDING);
+	}
 }
-

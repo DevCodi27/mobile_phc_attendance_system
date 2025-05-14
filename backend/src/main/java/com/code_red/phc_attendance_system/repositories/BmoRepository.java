@@ -9,6 +9,5 @@ import com.code_red.phc_attendance_system.entities.Bmo;
 
 @Repository
 public interface BmoRepository extends JpaRepository<Bmo, Long> {
-    Optional<Bmo> findByBlockName(String blockName);
+	Optional<Bmo> findByBlockName(String blockName);
 }
-
