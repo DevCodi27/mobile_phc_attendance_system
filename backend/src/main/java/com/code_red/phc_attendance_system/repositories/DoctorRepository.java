@@ -13,5 +13,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long>{
 	public Optional<Doctor> findByEmail(String email);
 
 	public List<Doctor> findByFacility(Facility facility);
-
+	
+	List<Doctor> findByFacilityIn(List<Facility> facilities);
 }

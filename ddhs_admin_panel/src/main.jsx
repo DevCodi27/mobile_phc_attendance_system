@@ -14,6 +14,9 @@ import RegisterUser from "./pages/UserRegistrationForm";
 import FacilityRegistrationForm from "./pages/FacilityRegistrationForm";
 import ProtectedRoute from "./components/ProtectedRoute";
 import 'leaflet/dist/leaflet.css';
+import PendingShifts from "./pages/PendingShifts"
+import DoctorsInBlock from "./pages/DoctorsInBlock"
+import './index.css';
 
 
 const router = createBrowserRouter([
@@ -57,12 +60,20 @@ const router = createBrowserRouter([
     element:<DoctorList />
   },
   {
+    path:"block/:blockName/doctors",
+    element:<DoctorsInBlock />
+  },
+  {
     path: "/dho",
     element: <ProtectedRoute allowedRoles={["DHO"]} />, // ✅ Protect DHO Route
     children: [{ path: "/dho", element: <Dho /> }],
   },{
     path:"/register-phc",
     element:<FacilityRegistrationForm />
+  },
+  {
+    path:"/pending-shifts",
+    element:<PendingShifts />
   },
   {
     path: "*",

@@ -28,4 +28,7 @@ public interface FacilityRepository extends JpaRepository<Facility, Long> {
     
     @Query("SELECT new com.code_red.phc_attendance_system.dto.FacilityNameDTO(f.id, f.name) FROM Facility f")
     List<FacilityNameDTO> findAllFacilityNames();
+    
+    @Query("SELECT DISTINCT f.block FROM Facility f WHERE f.district = :district")
+    List<String> findBlocksByDistrict(@Param("district") String district);
 }

@@ -33,10 +33,10 @@ public class Shift {
 	private LocalTime endTime;
 	@ManyToOne
 	@JoinColumn(name = "assigned_by")
-	private AppUser assignedBy;
+	private Bmo assignedBy;
 	@ManyToOne
 	@JoinColumn(name = "approved_by")
-	private AppUser approvedBy;
+	private Dho approvedBy;
 	
 	@Enumerated(EnumType.STRING)
 	private ShiftStatus status;
