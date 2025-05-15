@@ -52,7 +52,7 @@ public class RegionService {
 					.getPrincipal();
 			Optional<Doctor> doctorOpt = doctorService.findByEmail(userDetails.getUsername());
 
-			if (doctorOpt.isEmpty())
+			if (!doctorOpt.isPresent())
 				return status;
 
 			Doctor doctor = doctorOpt.get();

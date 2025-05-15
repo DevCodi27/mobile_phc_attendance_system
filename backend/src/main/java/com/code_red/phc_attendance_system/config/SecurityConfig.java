@@ -2,8 +2,6 @@ package com.code_red.phc_attendance_system.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

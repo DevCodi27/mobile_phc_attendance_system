@@ -61,7 +61,6 @@ public class UserService {
 			user = new Admin(userDTO.getUserId(), userDTO.getFullName(), userDTO.getEmail(),
 					passwordEncoder.encode(userDTO.getPassword()), userDTO.getPhone(), roles // Assign roles directly
 			);
-//	        throw new IllegalArgumentException("User must have either BMO or DHO Received: " + roleName);
 		}
 
 		return userRepository.save(user);
