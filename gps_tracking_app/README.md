@@ -1,3 +1,4 @@
+
 ````markdown
 # 📱 GPS Tracking App
 
@@ -21,8 +22,13 @@ Before you begin, ensure you have the following installed:
 
 ## 🔧 Installation
 
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/your-username/my-react-native-app.git
+   cd my-react-native-app
+````
 
-**Install Dependencies**
+2. **Install Dependencies**
 
    ```bash
    npm install
@@ -88,6 +94,21 @@ Make sure an Android emulator is running or a device is connected.
 
 ---
 
+## 🛠 Folder Structure
+
+```
+my-react-native-app/
+├── android/         # Native Android project
+├── ios/             # Native iOS project
+├── src/             # App source code
+│   ├── components/
+│   ├── screens/
+│   └── App.js
+├── App.js
+├── package.json
+```
+
+---
 
 ## 📄 Scripts
 
@@ -98,5 +119,8 @@ Make sure an Android emulator is running or a device is connected.
 | `npm run ios`     | Builds and runs on iOS (macOS)    |
 | `npm run build`   | (Optional) Production build steps |
 
+---
+
+```
 
 
