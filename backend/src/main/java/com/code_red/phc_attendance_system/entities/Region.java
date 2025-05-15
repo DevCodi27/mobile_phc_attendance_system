@@ -13,11 +13,11 @@ import lombok.Setter;
 @Setter
 @Table(name = "regions")
 public class Region {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @JsonIgnore
-    @Column(columnDefinition = "POLYGON NOT NULL SRID 4326") // Store as a spatial type
-    private Polygon boundary;
+	@JsonIgnore
+	@Column(columnDefinition = "POLYGON NOT NULL SRID 4326") // Store as a spatial type
+	private Polygon boundary;
 }

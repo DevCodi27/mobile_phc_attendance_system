@@ -6,5 +6,5 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class DhoDTO extends UserDTO {
-    private String districtName;
+	private String districtName;
 }

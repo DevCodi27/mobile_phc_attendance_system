@@ -16,36 +16,35 @@ import com.code_red.phc_attendance_system.repositories.FacilityRepository;
 public class FacilityService {
 	@Autowired
 	private FacilityRepository facilityRepository;
-	
-	public List<Facility> getAllFacility(){
+
+	public List<Facility> getAllFacility() {
 		return facilityRepository.findAll();
 	}
-	
+
 	public Facility findById(Long id) {
 		return facilityRepository.findById(id).get();
 	}
+
 	public List<String> getAllBlocks() {
-		
-	    return facilityRepository.findAllBlocks();
+
+		return facilityRepository.findAllBlocks();
 	}
 
-	
-	public List<Facility> findByBlock(String block){
+	public List<Facility> findByBlock(String block) {
 		return facilityRepository.findByBlock(block);
 	}
-	
+
 	public Facility save(Facility facility) {
 		return facilityRepository.save(facility);
 	}
-	
+
 	public List<FacilityNameDTO> getAllFacilityNames() {
-        return facilityRepository.findAllFacilityNames();
-    }
-	
+		return facilityRepository.findAllFacilityNames();
+	}
+
 //	public Facility findByBlock(String block) {
 //	    return facilityRepository.findByBlock(block);
 //	}
-
 
 //	public Map<String, List<Facility>> getFacilitiesByBlocks() {
 //		List<String> allBlocks = getAllBlocks();

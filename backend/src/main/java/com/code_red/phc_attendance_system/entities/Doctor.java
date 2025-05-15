@@ -14,35 +14,31 @@ import lombok.NoArgsConstructor;
 @Table(name = "doctors")
 public class Doctor {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long doctorId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long doctorId;
 
-    private String fullName;
+	private String fullName;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+	@Column(unique = true, nullable = false)
+	private String email;
 
-    @JsonIgnore
-    private String password;
+	@JsonIgnore
+	private String password;
 
-    private String fingerprint;
-    private String specialization;
+	private String fingerprint;
+	private String specialization;
 
-    @ManyToOne
-    @JoinColumn(name = "facility_id")
-    @JsonIgnore
-    private Facility facility;
+	@ManyToOne
+	@JoinColumn(name = "facility_id")
+	@JsonIgnore
+	private Facility facility;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-        name = "doctor_roles",
-        joinColumns = @JoinColumn(name = "doctor_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles;
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "doctor_roles", joinColumns = @JoinColumn(name = "doctor_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    private Shift shift;
-    
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	private Shift shift;
+
 }

@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "shifts")
 public class Shift {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -37,7 +37,7 @@ public class Shift {
 	@ManyToOne
 	@JoinColumn(name = "approved_by")
 	private Dho approvedBy;
-	
+
 	@Enumerated(EnumType.STRING)
 	private ShiftStatus status;
 

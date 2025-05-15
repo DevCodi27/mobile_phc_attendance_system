@@ -16,19 +16,19 @@ import com.code_red.phc_attendance_system.services.BmoService;
 @RequestMapping("/api/bmo")
 public class BmoController {
 
-    @Autowired
-    private BmoService bmoService;
+	@Autowired
+	private BmoService bmoService;
 
-    @GetMapping
-    public ResponseEntity<Bmo> getBmoByBlockName(@RequestParam String blockName) {
-        Bmo bmo = bmoService.getBmoByBlockName(blockName);
-        return new ResponseEntity<>(bmo, HttpStatus.ACCEPTED);
-    }
-    
-    @GetMapping("/{id}")
-    public ResponseEntity<Bmo> getBmoById(@PathVariable Long id) {
-        Bmo bmo = bmoService.findById(id);
-        return new ResponseEntity<>(bmo, HttpStatus.ACCEPTED);
-    }
- 
+	@GetMapping
+	public ResponseEntity<Bmo> getBmoByBlockName(@RequestParam String blockName) {
+		Bmo bmo = bmoService.getBmoByBlockName(blockName);
+		return new ResponseEntity<>(bmo, HttpStatus.ACCEPTED);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Bmo> getBmoById(@PathVariable Long id) {
+		Bmo bmo = bmoService.findById(id);
+		return new ResponseEntity<>(bmo, HttpStatus.ACCEPTED);
+	}
+
 }

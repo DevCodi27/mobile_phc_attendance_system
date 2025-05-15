@@ -16,49 +16,40 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtil {
-    private final String SECRET_KEY = "your_secret_key_your_secret_key_your_secret"; // Must be at least 32 bytes
+	private final String SECRET_KEY = "your_secret_key_your_secret_key_your_secret"; // Must be at least 32 bytes
 
-    private Key getSigningKey() {
-    	return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
-    }
+	private Key getSigningKey() {
+		return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+	}
 
-    public String generateToken(UserDetails userDetails, Set<Role> roles) {
-        String roleNames = roles.stream()
-                .map(Role::getName)
-                .collect(Collectors.joining(","));
-    	
-    	return Jwts.builder()
-                .subject(userDetails.getUsername())
-                .claim("roles", roleNames)
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour expiry
-                .signWith(getSigningKey()) // Corrected signing method
-                .compact();
-    }
+	public String generateToken(UserDetails userDetails, Set<Role> roles) {
+		String roleNames = roles.stream().map(Role::getName).collect(Collectors.joining(","));
 
-    public String extractUsername(String token) {
-        return extractClaims(token).getSubject();
-    }
+		return Jwts.builder().subject(userDetails.getUsername()).claim("roles", roleNames).issuedAt(new Date())
+				.expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour expiry
+				.signWith(getSigningKey()) // Corrected signing method
+				.compact();
+	}
 
-    public boolean validateToken(String token, UserDetails userDetails) {
-        return extractUsername(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
-    }
+	public String extractUsername(String token) {
+		return extractClaims(token).getSubject();
+	}
 
-    private boolean isTokenExpired(String token) {
-        return extractClaims(token).getExpiration().before(new Date());
-    }
+	public boolean validateToken(String token, UserDetails userDetails) {
+		return extractUsername(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
+	}
 
-    private Claims extractClaims(String token) {
-        return Jwts.parser()
-                .verifyWith((SecretKey) getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-    }
+	private boolean isTokenExpired(String token) {
+		return extractClaims(token).getExpiration().before(new Date());
+	}
 
-    public List<String> extractRoles(String token) {
-        Claims claims = extractClaims(token);
-        return Arrays.asList(claims.get("roles", String.class).split(","));
-    }
+	private Claims extractClaims(String token) {
+		return Jwts.parser().verifyWith((SecretKey) getSigningKey()).build().parseSignedClaims(token).getPayload();
+	}
+
+	public List<String> extractRoles(String token) {
+		Claims claims = extractClaims(token);
+		return Arrays.asList(claims.get("roles", String.class).split(","));
+	}
 
 }

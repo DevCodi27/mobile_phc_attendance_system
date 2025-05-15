@@ -28,7 +28,7 @@ public class Attendance {
 	@ManyToOne
 	@JoinColumn(name = "doctor_id")
 	private Doctor doctor;
-	
+
 	private LocalTime checkInTime;
 	private Integer missedCounts;
 	private LocalTime checkOutTime;

@@ -1,50 +1,126 @@
-# Welcome to your Expo app 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+````markdown
+# 📱 GPS Tracking App
 
-## Get started
+A cross-platform mobile application built using **React Native**. This app runs on both **Android** and **iOS** devices.
 
-1. Install dependencies
+---
+
+## 🚀 Getting Started
+
+### 📦 Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Node.js** (v14 or higher) – [Download](https://nodejs.org/)
+- **npm** or **Yarn**
+- **React Native CLI** or **Expo CLI**
+- **Android Studio** (for Android emulator)
+- **Xcode** (macOS only, for iOS development)
+
+---
+
+## 🔧 Installation
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/your-username/my-react-native-app.git
+   cd my-react-native-app
+````
+
+2. **Install Dependencies**
 
    ```bash
    npm install
+   # or
+   yarn install
    ```
 
-2. Start the app
+---
+
+## 📱 Running the App
+
+> Choose one of the following setups based on your stack.
+
+### ✅ Using **Expo CLI** (if created with Expo)
+
+1. Install Expo CLI:
 
    ```bash
-    npx expo start
+   npm install -g expo-cli
    ```
 
-In the output, you'll find options to open the app in a
+2. Start the project:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```bash
+   expo start
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+3. Scan the QR code using the **Expo Go** app on your phone (Android/iOS).
 
-## Get a fresh project
+---
 
-When you're ready, run:
+### ✅ Using **React Native CLI**
 
-```bash
-npm run reset-project
+#### 🔹 Android
+
+1. Start Metro bundler:
+
+   ```bash
+   npx react-native start
+   ```
+
+2. In a new terminal, run the Android app:
+
+   ```bash
+   npx react-native run-android
+   ```
+
+Make sure an Android emulator is running or a device is connected.
+
+#### 🔹 iOS (macOS only)
+
+1. Install CocoaPods dependencies:
+
+   ```bash
+   cd ios && pod install && cd ..
+   ```
+
+2. Start the app:
+
+   ```bash
+   npx react-native run-ios
+   ```
+
+---
+
+## 🛠 Folder Structure
+
+```
+my-react-native-app/
+├── android/         # Native Android project
+├── ios/             # Native iOS project
+├── src/             # App source code
+│   ├── components/
+│   ├── screens/
+│   └── App.js
+├── App.js
+├── package.json
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## 📄 Scripts
 
-To learn more about developing your project with Expo, look at the following resources:
+| Command           | Description                       |
+| ----------------- | --------------------------------- |
+| `npm start`       | Starts Metro bundler              |
+| `npm run android` | Builds and runs on Android        |
+| `npm run ios`     | Builds and runs on iOS (macOS)    |
+| `npm run build`   | (Optional) Production build steps |
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+```
 
-Join our community of developers creating universal apps.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.

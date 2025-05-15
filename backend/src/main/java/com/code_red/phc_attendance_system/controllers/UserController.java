@@ -19,15 +19,15 @@ import com.code_red.phc_attendance_system.services.UserService;
 public class UserController {
 	@Autowired
 	private UserService userService;
-	
+
 	@PostMapping("/register")
 	public ResponseEntity<AppUser> register(@RequestBody UserDTO userDTO) {
 		return new ResponseEntity<>(userService.register(userDTO), HttpStatus.CREATED);
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<AppUser> getUserById(@PathVariable Long id){
+	public ResponseEntity<AppUser> getUserById(@PathVariable Long id) {
 		return new ResponseEntity<>(userService.findById(id), HttpStatus.ACCEPTED);
 	}
-	
+
 }

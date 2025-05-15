@@ -8,11 +8,11 @@ import com.code_red.phc_attendance_system.entities.Doctor;
 import com.code_red.phc_attendance_system.entities.Facility;
 
 @Repository
-public interface DoctorRepository extends JpaRepository<Doctor, Long>{
+public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
 	public Optional<Doctor> findByEmail(String email);
 
 	public List<Doctor> findByFacility(Facility facility);
-	
+
 	List<Doctor> findByFacilityIn(List<Facility> facilities);
 }
