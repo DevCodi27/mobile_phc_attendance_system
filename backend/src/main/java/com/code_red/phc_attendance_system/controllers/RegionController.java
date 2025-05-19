@@ -17,9 +17,12 @@ import com.code_red.phc_attendance_system.services.RegionService;
 public class RegionController {
 	@Autowired
 	private RegionService regionService;
-	
+
 	@PostMapping("/validate")
-	public ResponseEntity<GPSResponseDTO> verifyGPSWithinRegion(@RequestBody LocationDTO locationDTO){
-		return new ResponseEntity<>(new GPSResponseDTO(regionService.sendAlertIfOutsideRegion(locationDTO.getLatitude(), locationDTO.getLongitude())), HttpStatus.OK);
+	public ResponseEntity<GPSResponseDTO> verifyGPSWithinRegion(@RequestBody LocationDTO locationDTO) {
+		return new ResponseEntity<>(
+				new GPSResponseDTO(
+						regionService.sendAlertIfOutsideRegion(locationDTO.getLatitude(), locationDTO.getLongitude())),
+				HttpStatus.OK);
 	}
 }

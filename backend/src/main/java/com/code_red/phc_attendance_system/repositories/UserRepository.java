@@ -8,14 +8,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.code_red.phc_attendance_system.entities.AppUser;
 
-
 @Repository
-public interface UserRepository extends JpaRepository<AppUser, Long>{
+public interface UserRepository extends JpaRepository<AppUser, Long> {
 
 	Optional<AppUser> findByEmail(String email);
-	    
+
 	@Query("SELECT u FROM AppUser u JOIN FETCH u.roles r WHERE u.district = :districtName AND r.name = 'DHO'")
 	Optional<AppUser> findByDistrictAndRole(@Param("districtName") String districtName);
-
 
 }

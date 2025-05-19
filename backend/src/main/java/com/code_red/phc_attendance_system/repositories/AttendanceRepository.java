@@ -10,9 +10,11 @@ import com.code_red.phc_attendance_system.entities.Attendance;
 import com.code_red.phc_attendance_system.entities.Doctor;
 
 @Repository
-public interface AttendanceRepository extends JpaRepository<Attendance, Long>{
-	
+public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
+
 	List<Attendance> findByDate(LocalDate today);
+
 	boolean existsByDoctorAndDate(Doctor doctor, LocalDate date);
+
 	Attendance findByDoctorAndDate(Doctor doctor, LocalDate date);
 }

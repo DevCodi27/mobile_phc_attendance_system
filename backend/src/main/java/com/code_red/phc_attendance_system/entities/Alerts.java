@@ -19,11 +19,11 @@ public class Alerts {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String message;
-	
+
 	private LocalDateTime sentAt;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "recipient_id")
 	private AppUser recipient;

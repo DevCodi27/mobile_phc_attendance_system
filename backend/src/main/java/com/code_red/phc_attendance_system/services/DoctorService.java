@@ -1,5 +1,6 @@
 package com.code_red.phc_attendance_system.services;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -38,115 +39,121 @@ import jakarta.transaction.Transactional;
 public class DoctorService {
 	@Autowired
 	private DoctorRepository doctorRepository;
-	
+
 	@Autowired
 	private ShiftRepository shiftRepository;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private FacilityService facilityService;
-	
+
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private RoleRepository roleRepository;
-	
+
+	@Autowired
+	private EmailService emailService;
+
 	public Doctor register(DoctorRegistrationDTO doctorDTO) {
 		Role role = roleRepository.findById(doctorDTO.getRole().getRoleId())
-                .orElseThrow(() -> new RuntimeException("Role not found"));
+				.orElseThrow(() -> new RuntimeException("Role not found"));
 		Set<Role> roles = new HashSet<>();
-        roles.add(role);
+		roles.add(role);
 		Doctor doctor = new Doctor();
 		Facility facility = facilityService.findById(doctorDTO.getFacility());
-	    doctor.setFullName(doctorDTO.getName());
-	    doctor.setEmail(doctorDTO.getEmail());
-	    doctor.setPassword(passwordEncoder.encode(doctorDTO.getPassword())); // Encrypt password
-	    doctor.setSpecialization(doctorDTO.getSpecialization());
-	    doctor.setFacility(facility);
-	    doctor.setRoles(roles);
-		return doctorRepository.save(doctor);
+		Shift shift = new Shift();
+		shift.setDate(LocalDate.now());
+		shift.setStatus(ShiftStatus.PENDING);
+		doctor.setFullName(doctorDTO.getName());
+		doctor.setEmail(doctorDTO.getEmail());
+		doctor.setPassword(passwordEncoder.encode(doctorDTO.getPassword())); // Encrypt password
+		doctor.setSpecialization(doctorDTO.getSpecialization());
+		doctor.setShift(null);
+		doctor.setFacility(facility);
+		doctor.setRoles(roles);
+		Doctor doc = doctorRepository.save(doctor);
+		if (doc != null) {
+			emailService.sendRegisterNotification(doc.getFullName(), doc.getDoctorId(), doc.getEmail(), doc.getPassword());
+		}
+		return doc;
 	}
-	
-	public List<Doctor> getAllDoctors(){
+
+	public List<Doctor> getAllDoctors() {
 		return doctorRepository.findAll();
 	}
-    
+
 	public List<DoctorDTO> getByFacility(Facility facility) {
-        // Fetch list of doctors and map to DTOs
-        return doctorRepository.findByFacility(facility)
-                .stream()
-                .map(DoctorDTO::new)  // Convert Doctor to DoctorDTO
-                .collect(Collectors.toList());
-    }
+		// Fetch list of doctors and map to DTOs
+		return doctorRepository.findByFacility(facility).stream().map(DoctorDTO::new) // Convert Doctor to DoctorDTO
+				.collect(Collectors.toList());
+	}
 
 	public Optional<Doctor> findByEmail(String email) {
 		// TODO Auto-generated method stub
 		return doctorRepository.findByEmail(email);
 	}
-	
+
 	public Doctor getDoctorById(Long id) {
-		
+
 		return doctorRepository.findById(id).get();
 	}
-	
+
 	@Transactional
 	public Doctor updateDoctorShift(Long doctorId, ShiftDTO newShift) {
-	    Doctor doctor = getDoctorById(doctorId);
+		Doctor doctor = getDoctorById(doctorId);
 
-	    Bmo assignedBy = (Bmo)userService.findById(newShift.getAssignedBy());
+		Bmo assignedBy = (Bmo) userService.findById(newShift.getAssignedBy());
 
-	    Dho approvedBy = null;
-	    if (newShift.getApprovedBy() != null) {
-	        approvedBy = (Dho)userService.findById(newShift.getApprovedBy());
-	    }
+		Dho approvedBy = null;
+		if (newShift.getApprovedBy() != null) {
+			approvedBy = (Dho) userService.findById(newShift.getApprovedBy());
+		}
 
-	    Shift shift = new Shift();
-	    shift.setDate(newShift.getDate());
-	    shift.setStartTime(newShift.getStartTime());
-	    shift.setEndTime(newShift.getEndTime());
-	    shift.setStatus(ShiftStatus.PENDING);
-	    shift.setAssignedBy(assignedBy);
-	    shift.setApprovedBy(approvedBy);
+		Shift shift = new Shift();
+		shift.setDate(newShift.getDate());
+		shift.setStartTime(newShift.getStartTime());
+		shift.setEndTime(newShift.getEndTime());
+		shift.setStatus(ShiftStatus.PENDING);
+		shift.setAssignedBy(assignedBy);
+		shift.setApprovedBy(approvedBy);
 
-	    Shift savedShift = shiftRepository.save(shift);
-	    doctor.setShift(savedShift);
+		Shift savedShift = shiftRepository.save(shift);
+		doctor.setShift(savedShift);
 
-	    return doctorRepository.save(doctor);
+		return doctorRepository.save(doctor);
 	}
-	
-    public Map<String, List<DoctorDTO>> getDoctorsGroupedByBlock(String blockName) {
-        List<Facility> facilities = facilityService.findByBlock(blockName);
 
-        if (facilities == null || facilities.isEmpty()) {
-            return Map.of(blockName, Collections.emptyList());
-        }
+	public Map<String, List<DoctorDTO>> getDoctorsGroupedByBlock(String blockName) {
+		List<Facility> facilities = facilityService.findByBlock(blockName);
 
-        List<Doctor> doctors = doctorRepository.findByFacilityIn(facilities);
-        
-        List<DoctorDTO> doctorDTOs = new ArrayList<>();
-        for (Doctor doctor : doctors) {
-            DoctorDTO dto = new DoctorDTO(doctor);
-            doctorDTOs.add(dto);
-        }
+		if (facilities == null || facilities.isEmpty()) {
+			return Map.of(blockName, Collections.emptyList());
+		}
 
-        Map<String, List<DoctorDTO>> result = new HashMap<>();
-        result.put(blockName, doctorDTOs);
-        return result;
-    }
+		List<Doctor> doctors = doctorRepository.findByFacilityIn(facilities);
 
-	   
-	    public List<FingerprintDTO> getIdAndFingerprintByFacility(Facility facility) {
-	        List<Doctor> doctors = doctorRepository.findByFacility(facility);
+		List<DoctorDTO> doctorDTOs = new ArrayList<>();
+		for (Doctor doctor : doctors) {
+			DoctorDTO dto = new DoctorDTO(doctor);
+			doctorDTOs.add(dto);
+		}
 
-	        return doctors.stream()
-	                .map(doctor -> {
-	                    FingerprintDTO dto = new FingerprintDTO();
-	                    dto.setId(doctor.getDoctorId());
-	                    dto.setFingerprint(doctor.getFingerprint());
-	                    return dto;
-	                })
-	                .collect(Collectors.toList());
-	    }
+		Map<String, List<DoctorDTO>> result = new HashMap<>();
+		result.put(blockName, doctorDTOs);
+		return result;
+	}
+
+	public List<FingerprintDTO> getIdAndFingerprintByFacility(Facility facility) {
+		List<Doctor> doctors = doctorRepository.findByFacility(facility);
+
+		return doctors.stream().map(doctor -> {
+			FingerprintDTO dto = new FingerprintDTO();
+			dto.setId(doctor.getDoctorId());
+			dto.setFingerprint(doctor.getFingerprint());
+			return dto;
+		}).collect(Collectors.toList());
+	}
 }

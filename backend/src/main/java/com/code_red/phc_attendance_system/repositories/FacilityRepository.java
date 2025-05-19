@@ -13,22 +13,22 @@ import com.code_red.phc_attendance_system.entities.Facility;
 
 @Repository
 public interface FacilityRepository extends JpaRepository<Facility, Long> {
-	
+
 	List<Facility> findByBlock(String block);
-	
+
 	@Query("SELECT DISTINCT f.block FROM Facility f")
 	List<String> findAllBlocks();
-	
-    @Query("SELECT f FROM Facility f WHERE f.block = :block")
-    List<Facility> findFacilitiesByBlock(@Param("block") String block);
 
-    Optional<Facility> findById(Long id);
+	@Query("SELECT f FROM Facility f WHERE f.block = :block")
+	List<Facility> findFacilitiesByBlock(@Param("block") String block);
 
-    List<Facility> findByDistrict(String district);
-    
-    @Query("SELECT new com.code_red.phc_attendance_system.dto.FacilityNameDTO(f.id, f.name) FROM Facility f")
-    List<FacilityNameDTO> findAllFacilityNames();
-    
-    @Query("SELECT DISTINCT f.block FROM Facility f WHERE f.district = :district")
-    List<String> findBlocksByDistrict(@Param("district") String district);
+	Optional<Facility> findById(Long id);
+
+	List<Facility> findByDistrict(String district);
+
+	@Query("SELECT new com.code_red.phc_attendance_system.dto.FacilityNameDTO(f.id, f.name) FROM Facility f")
+	List<FacilityNameDTO> findAllFacilityNames();
+
+	@Query("SELECT DISTINCT f.block FROM Facility f WHERE f.district = :district")
+	List<String> findBlocksByDistrict(@Param("district") String district);
 }

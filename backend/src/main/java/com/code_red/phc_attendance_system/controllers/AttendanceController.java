@@ -16,7 +16,7 @@ import com.code_red.phc_attendance_system.services.AttendanceService;
 public class AttendanceController {
 	@Autowired
 	private AttendanceService attendanceService;
-	
+
 	@PostMapping("/:doctorId")
 	public ResponseEntity<Attendance> markAttendance(@PathVariable Long doctorId) {
 		return new ResponseEntity<>(attendanceService.markAttendance(doctorId), HttpStatus.CREATED);

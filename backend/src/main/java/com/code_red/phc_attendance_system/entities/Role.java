@@ -9,23 +9,23 @@ import java.util.Set;
 @Table(name = "roles")
 public class Role {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roleId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long roleId;
 
-    @Column(unique = true, nullable = false)
-    private String name;
+	@Column(unique = true, nullable = false)
+	private String name;
 
-    @ManyToMany
-    private Set<AppUser> users;
+	@ManyToMany
+	private Set<AppUser> users;
 
-    @ManyToMany
-    private Set<Doctor> doctors;
+	@ManyToMany
+	private Set<Doctor> doctors;
 
-    public Role() {}
+	public Role() {
+	}
 
-    public Role(String name) {
-        this.name = name;
-    }
+	public Role(String name) {
+		this.name = name;
+	}
 }
-

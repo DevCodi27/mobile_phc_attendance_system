@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DoctorRegistrationDTO {
-    private String name;
-    private String password;
-    private String email;
-    private String specialization;
-    private Long facility;
-    private Role role;
+	private String name;
+	private String password;
+	private String email;
+	private String specialization;
+	private Long facility;
+	private Role role;
 }
